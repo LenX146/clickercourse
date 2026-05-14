@@ -1,289 +1,369 @@
-// ==================== ПРОМОКОДЫ ====================
-const promoCodes = [
-    { code: "SLENG10", discount: 10 },
-    { code: "SSS8", discount: 8 },
-    { code: "WELCOME", discount: 5 }
-];
+// ==================== СОСТОЯНИЕ ====================
+let ordersCache = [];
+let cloudClient = null;
+let cloudMode = false;
 
-let appliedPromo = null;
+function isCloudConfigured() {
+    return typeof slengSupabaseConfigured === "function" && slengSupabaseConfigured();
+}
 
-// ==================== ОТОБРАЖЕНИЕ ЗАКАЗА ====================
-function renderOrderSummary() {
-    const cart = JSON.parse(localStorage.getItem("s-l-e-n-g-cart")) || [];
-    const container = document.getElementById("orderItems");
-    const subtotalSpan = document.getElementById("subtotal");
-    const totalSpan = document.getElementById("totalPrice");
-    const deliveryCost = 240;
+function getUi() {
+    return {
+        hint: document.getElementById("adminCloudHint"),
+        auth: document.getElementById("adminCloudAuth"),
+        ordersContent: document.getElementById("adminOrdersContent"),
+        loginErr: document.getElementById("adminLoginErr"),
+        logoutBtn: document.getElementById("adminLogoutBtn"),
+    };
+}
+
+function setCloudUi({ showLogin, showOrders }) {
+    const { hint, auth, ordersContent, logoutBtn } = getUi();
+    if (auth) auth.hidden = !showLogin;
+    if (ordersContent) ordersContent.hidden = !showOrders;
+    if (logoutBtn) logoutBtn.hidden = !showOrders || !isCloudConfigured();
+    if (hint) {
+        if (!isCloudConfigured()) {
+            hint.textContent =
+                "Облако не подключено: заказы только в этом браузере (localStorage). Для общей базы настройте Supabase — файл database/supabase-orders.sql и config.js.";
+            hint.hidden = false;
+        } else if (showLogin) {
+            hint.textContent = "Заказы сохраняются в Supabase. Войдите, чтобы видеть заказы с любого устройства.";
+            hint.hidden = false;
+        } else {
+            hint.hidden = true;
+        }
+    }
+}
+
+// ==================== ОТРИСОВКА ====================
+function renderOrdersList(orders) {
+    ordersCache = orders;
+    const container = document.getElementById("ordersList");
+    const totalSpan = document.getElementById("totalOrders");
 
     if (!container) return;
 
-    if (cart.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:40px;">Корзина пуста</div>`;
-        subtotalSpan.innerText = "0 ₽";
-        totalSpan.innerText = "0 ₽";
+    if (orders.length === 0) {
+        container.innerHTML = `<div class="no-orders">📭 Заказов пока нет</div>`;
+        if (totalSpan) totalSpan.innerText = "0";
         return;
     }
 
-    let subtotal = 0;
-    container.innerHTML = cart.map(item => {
-        const itemTotal = item.price * item.quantity;
-        subtotal += itemTotal;
+    if (totalSpan) totalSpan.innerText = orders.length;
+
+    container.innerHTML = orders.map((order, index) => {
+        const date = new Date(order.date).toLocaleString("ru-RU");
+        const orderNo = index + 1;
+        const hasDiscount = order.discount && order.discount.amount > 0;
+        const delKey = order.cloudId ? `data-cloud-id="${order.cloudId}"` : `data-local-index="${index}"`;
+
         return `
-            <div class="order-item">
-                <div class="order-item-info">
-                    <div class="order-item-name">${item.name}</div>
-                    <div class="order-item-details">размер: ${item.selectedSize || "OS"} • ${item.quantity} x ${item.price} ₽</div>
+            <div class="order-card" data-order-index="${index}">
+                <div class="order-header">
+                    <div class="order-id">Заказ №${orderNo}</div>
+                    <div class="order-date">📅 ${date}</div>
+                    <div class="order-total">💰 ${order.total.toLocaleString("ru-RU")} ₽</div>
                 </div>
-                <div class="order-item-price">${itemTotal} ₽</div>
+
+                <div class="order-customer">
+                    <p>👤 <strong>${order.customer.fullName}</strong></p>
+                    <p>📞 ${order.customer.phone} | ✉️ ${order.customer.email || "—"}</p>
+                    <p>📍 ${order.customer.address || "—"} | 📱 ${order.customer.telegram || "—"}</p>
+                </div>
+
+                ${hasDiscount ? `
+                <div style="background:#e8f5e9; padding:8px 12px; margin-bottom:15px; font-size:13px;">
+                    🏷️ Промокод: ${order.discount.code} — скидка ${order.discount.percent}% (${order.discount.amount} ₽)
+                </div>
+                ` : ""}
+
+                <table class="order-items-table">
+                    <thead>
+                        <tr><th>Товар</th><th>Размер</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>
+                    </thead>
+                    <tbody>
+                        ${order.items.map(item => `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.size}</td>
+                                <td>${item.quantity}</td>
+                                <td>${item.price} ₽</td>
+                                <td>${item.price * item.quantity} ₽</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+
+                <div style="margin-top:15px; text-align:right; font-size:14px;">
+                    Сумма товаров: ${order.subtotal} ₽<br>
+                    Доставка: ${order.delivery} ₽
+                    ${hasDiscount ? `<br><span style="color:#2a7f2a;">Скидка (${order.discount.code}): -${order.discount.amount} ₽</span>` : ""}
+                    <br><strong>ИТОГО: ${order.total} ₽</strong>
+                </div>
+
+                <button type="button" class="delete-order-btn" ${delKey}>🗑 Удалить заказ</button>
             </div>
         `;
     }).join("");
 
-    let discountAmount = 0;
-    if (appliedPromo) {
-        discountAmount = (subtotal * appliedPromo.discount) / 100;
-    }
-
-    const total = subtotal + deliveryCost - discountAmount;
-
-    subtotalSpan.innerText = `${subtotal} ₽`;
-
-    const existingDiscountRow = document.querySelector(".order-discount");
-    if (appliedPromo && discountAmount > 0) {
-        if (existingDiscountRow) {
-            existingDiscountRow.querySelector("span:last-child").innerText = `- ${discountAmount} ₽ (${appliedPromo.code})`;
-        } else {
-            const discountRow = document.createElement("div");
-            discountRow.className = "order-discount";
-            discountRow.style.display = "flex";
-            discountRow.style.justifyContent = "space-between";
-            discountRow.style.padding = "8px 0";
-            discountRow.style.fontSize = "14px";
-            discountRow.style.color = "#2a7f2a";
-            discountRow.innerHTML = `<span>Промокод (${appliedPromo.code}):</span><span>- ${discountAmount} ₽</span>`;
-            const deliveryRow = document.querySelector(".order-delivery");
-            if (deliveryRow) deliveryRow.insertAdjacentElement("afterend", discountRow);
-        }
-    } else if (existingDiscountRow) {
-        existingDiscountRow.remove();
-    }
-
-    totalSpan.innerText = `${Math.round(total)} ₽`;
+    document.querySelectorAll(".delete-order-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const cid = btn.getAttribute("data-cloud-id");
+            if (cid) deleteOrderCloud(cid);
+            else {
+                const idx = parseInt(btn.getAttribute("data-local-index"), 10);
+                if (!Number.isNaN(idx)) deleteOrderLocal(idx);
+            }
+        });
+    });
 }
 
-// ==================== ОТПРАВКА ЗАКАЗА ====================
-async function submitOrder() {
-    const submitBtn = document.getElementById("submitOrderBtn");
-    const fullName = document.getElementById("fullName")?.value.trim();
-    const phone = document.getElementById("phone")?.value.trim();
-    const email = document.getElementById("email")?.value.trim();
-    const address = document.getElementById("address")?.value.trim();
-    let telegram = document.getElementById("telegram")?.value.trim();
+// ==================== LOCALSTORAGE ====================
+function loadOrdersLocal() {
+    cloudMode = false;
+    const orders = JSON.parse(localStorage.getItem("s-l-e-n-g-orders")) || [];
+    renderOrdersList(orders);
+}
 
-    // ===== ВАЛИДАЦИЯ =====
-    if (!fullName || !phone) {
-        alert("Заполните обязательные поля: ФИО и телефон");
+function deleteOrderLocal(index) {
+    if (!confirm("Удалить этот заказ?")) return;
+    const orders = JSON.parse(localStorage.getItem("s-l-e-n-g-orders")) || [];
+    orders.splice(index, 1);
+    localStorage.setItem("s-l-e-n-g-orders", JSON.stringify(orders));
+    loadOrdersLocal();
+    alert("Заказ удалён");
+}
+
+function clearAllOrdersLocal() {
+    if (confirm("⚠️ ВНИМАНИЕ! Это удалит ВСЕ заказы без возможности восстановления. Продолжить?")) {
+        localStorage.removeItem("s-l-e-n-g-orders");
+        loadOrdersLocal();
+        alert("Все заказы удалены");
+    }
+}
+
+// ==================== SUPABASE ====================
+async function loadOrdersFromCloud() {
+    if (!cloudClient) return;
+    const { data, error } = await cloudClient
+        .from("orders")
+        .select("id, created_at, payload")
+        .order("created_at", { ascending: false });
+    if (error) {
+        alert("Не удалось загрузить заказы: " + error.message);
+        return;
+    }
+    const orders = (data || []).map(slengRowToOrder);
+    cloudMode = true;
+    renderOrdersList(orders);
+}
+
+async function deleteOrderCloud(id) {
+    if (!confirm("Удалить этот заказ?")) return;
+    if (!cloudClient) return;
+    const { error } = await cloudClient.from("orders").delete().eq("id", id);
+    if (error) {
+        alert("Ошибка удаления: " + error.message);
+        return;
+    }
+    await loadOrdersFromCloud();
+    alert("Заказ удалён");
+}
+
+async function clearAllOrdersCloud() {
+    if (!confirm("⚠️ Удалить ВСЕ заказы в облаке?")) return;
+    if (!cloudClient) return;
+    if (ordersCache.length === 0) {
+        alert("Нет заказов для удаления");
+        return;
+    }
+    const ids = ordersCache.map(o => o.cloudId).filter(Boolean);
+    const { error } = await cloudClient.from("orders").delete().in("id", ids);
+    if (error) {
+        alert("Ошибка: " + error.message);
+        return;
+    }
+    await loadOrdersFromCloud();
+    alert("Все заказы удалены");
+}
+
+async function adminLogin() {
+    const email = document.getElementById("adminEmail")?.value.trim();
+    const password = document.getElementById("adminPassword")?.value;
+    const errEl = document.getElementById("adminLoginErr");
+    if (errEl) errEl.textContent = "";
+    if (!email || !password) {
+        if (errEl) errEl.textContent = "Введите email и пароль";
+        return;
+    }
+    if (!cloudClient) return;
+    const { error } = await cloudClient.auth.signInWithPassword({ email, password });
+    if (error) {
+        if (errEl) errEl.textContent = error.message;
+        return;
+    }
+}
+
+async function adminLogout() {
+    if (cloudClient) await cloudClient.auth.signOut();
+    setCloudUi({ showLogin: true, showOrders: false });
+}
+
+async function initCloudAdmin() {
+    cloudClient = slengCreateSupabaseClient();
+    if (!cloudClient) {
+        alert("Проверьте config.js и загрузку Supabase CDN.");
+        setCloudUi({ showLogin: false, showOrders: true });
+        loadOrdersLocal();
         return;
     }
 
-    // Проверка ФИО (только буквы, дефис, пробел)
-    if (!/^[a-zA-Zа-яА-ЯёЁ\s-]+$/.test(fullName)) {
-        alert("ФИО может содержать только буквы, пробелы и дефисы");
-        return;
-    }
-
-    // Проверка телефона (минимум 10 цифр)
-    const phoneDigits = phone?.replace(/\D/g, "") || "";
-    if (phoneDigits.length < 10) {
-        alert("Введите корректный номер телефона (минимум 10 цифр)");
-        return;
-    }
-
-    // Проверка email
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert("Введите корректный email адрес");
-        return;
-    }
-
-    // Проверка Telegram (обязательно с @, минимум 4 символа после @)
-    if (telegram) {
-        if (!telegram.startsWith("@")) {
-            alert("Telegram username должен начинаться с символа @");
-            return;
-        }
-        const username = telegram.substring(1);
-        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-            alert("После @ могут быть только буквы, цифры и подчёркивание");
-            return;
-        }
-        if (username.length < 4) {
-            alert("Telegram username должен содержать минимум 4 символа после @");
-            return;
-        }
-    }
-    // ===== КОНЕЦ ВАЛИДАЦИИ =====
-
-    const cart = JSON.parse(localStorage.getItem("s-l-e-n-g-cart")) || [];
-    if (cart.length === 0) {
-        alert("Корзина пуста");
-        return;
-    }
-
-    const deliveryCost = 240;
-    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    
-    let discountAmount = 0;
-    if (appliedPromo) {
-        discountAmount = (subtotal * appliedPromo.discount) / 100;
-    }
-    
-    const total = subtotal + deliveryCost - discountAmount;
-
-    const orderData = {
-        customer: { fullName, phone, email, address, telegram },
-        items: cart.map(item => ({
-            id: item.id,
-            name: item.name,
-            size: item.selectedSize || "OS",
-            quantity: item.quantity,
-            price: item.price
-        })),
-        subtotal: subtotal,
-        delivery: deliveryCost,
-        discount: appliedPromo ? {
-            code: appliedPromo.code,
-            amount: discountAmount,
-            percent: appliedPromo.discount
-        } : null,
-        total: Math.round(total),
-        date: new Date().toISOString()
-    };
-
-    if (submitBtn) submitBtn.disabled = true;
-
-    try {
-        if (typeof slengSupabaseConfigured === "function" && slengSupabaseConfigured()) {
-            await slengSaveOrderToCloud(orderData);
+    cloudClient.auth.onAuthStateChange((_event, session) => {
+        if (session) {
+            setCloudUi({ showLogin: false, showOrders: true });
+            loadOrdersFromCloud();
         } else {
-            const orders = JSON.parse(localStorage.getItem("s-l-e-n-g-orders")) || [];
-            orders.push(orderData);
-            localStorage.setItem("s-l-e-n-g-orders", JSON.stringify(orders));
+            setCloudUi({ showLogin: true, showOrders: false });
+            renderOrdersList([]);
         }
-    } catch (err) {
-        alert("Не удалось сохранить заказ: " + (err && err.message ? err.message : String(err)));
-        if (submitBtn) submitBtn.disabled = false;
+    });
+
+    const { data: { session } } = await cloudClient.auth.getSession();
+    if (session) {
+        setCloudUi({ showLogin: false, showOrders: true });
+        await loadOrdersFromCloud();
+    } else {
+        setCloudUi({ showLogin: true, showOrders: false });
+        renderOrdersList([]);
+    }
+
+    document.getElementById("adminLoginBtn")?.addEventListener("click", adminLogin);
+    document.getElementById("adminLogoutBtn")?.addEventListener("click", adminLogout);
+}
+
+// ==================== ЭКСПОРТ ====================
+function exportToCSV() {
+    if (ordersCache.length === 0) {
+        alert("Нет заказов для экспорта");
         return;
     }
 
-    localStorage.removeItem("s-l-e-n-g-cart");
+    const rows = [];
+    rows.push(["№", "Дата", "ФИО", "Телефон", "Email", "Адрес", "Telegram", "Промокод", "Скидка", "Товар", "Размер", "Кол-во", "Цена", "Сумма", "Итог заказа"]);
 
-    document.body.innerHTML = `
-        <div style="max-width: 600px; margin: 100px auto; text-align: center; font-family: Helvetica, sans-serif; letter-spacing: -0.6px;">
-            <h1 style="font-weight: 500; font-size: 28px; margin-bottom: 20px;">Спасибо за заказ!</h1>
-            <p style="font-size: 16px; margin-bottom: 20px;">За статусом товара следите в приложении СДЭК.</p>
-            <p style="font-size: 16px;">По любым вопросам пишите: <a href="https://t.me/slengsupport" target="_blank" style="color: #111; text-decoration: underline;">@slengsupport</a></p>
-            <a href="index.html" style="display: inline-block; margin-top: 40px; color: #888; text-decoration: none;">← Вернуться на главную</a>
-        </div>
+    ordersCache.forEach((order, orderIndex) => {
+        order.items.forEach(item => {
+            rows.push([
+                orderIndex + 1,
+                new Date(order.date).toLocaleString("ru-RU"),
+                order.customer.fullName,
+                order.customer.phone,
+                order.customer.email || "",
+                order.customer.address || "",
+                order.customer.telegram || "",
+                order.discount?.code || "",
+                order.discount?.amount || "",
+                item.name,
+                item.size,
+                item.quantity,
+                item.price,
+                item.price * item.quantity,
+                order.total
+            ]);
+        });
+    });
+
+    const csvContent = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.setAttribute("download", "s-l-e-n-g-all-orders.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function exportToXLS() {
+    if (ordersCache.length === 0) {
+        alert("Нет заказов для экспорта");
+        return;
+    }
+
+    let html = `
+        <html>
+        <head><meta charset="UTF-8"><title>S.L.E.N.G Все заказы</title></head>
+        <body>
+            <table border="1" cellpadding="5" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>№</th><th>Дата</th><th>ФИО</th><th>Телефон</th><th>Email</th>
+                        <th>Адрес</th><th>Telegram</th><th>Промокод</th><th>Скидка</th>
+                        <th>Товар</th><th>Размер</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th>Итог заказа</th>
+                    </tr>
+                </thead>
+                <tbody>
     `;
-}
 
-// ==================== ПРИМЕНЕНИЕ ПРОМОКОДА ====================
-const applyPromoBtn = document.getElementById("applyPromoBtn");
-const promoInput = document.getElementById("promocode");
-
-if (applyPromoBtn && promoInput) {
-    applyPromoBtn.addEventListener("click", () => {
-        const code = promoInput.value.trim().toUpperCase();
-        const found = promoCodes.find(p => p.code === code);
-        if (found) {
-            appliedPromo = found;
-            alert(`Промокод ${code} применён! Скидка ${found.discount}%`);
-            renderOrderSummary();
-        } else {
-            alert("Неверный промокод");
-        }
+    ordersCache.forEach((order, orderIndex) => {
+        order.items.forEach(item => {
+            html += `
+                <tr>
+                    <td>${orderIndex + 1}</td>
+                    <td>${new Date(order.date).toLocaleString("ru-RU")}</td>
+                    <td>${order.customer.fullName}</td>
+                    <td>${order.customer.phone}</td>
+                    <td>${order.customer.email || ""}</td>
+                    <td>${order.customer.address || ""}</td>
+                    <td>${order.customer.telegram || ""}</td>
+                    <td>${order.discount?.code || ""}</td>
+                    <td>${order.discount?.amount || ""}</td>
+                    <td>${item.name}</td>
+                    <td>${item.size}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price} ₽</td>
+                    <td>${item.price * item.quantity} ₽</td>
+                    <td>${order.total} ₽</td>
+                </tr>
+            `;
+        });
     });
+
+    html += `</tbody></table></body></html>`;
+
+    const blob = new Blob([html], { type: "application/vnd.ms-excel" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.setAttribute("download", "s-l-e-n-g-all-orders.xls");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
-// ==================== ВАЛИДАЦИЯ ПОЛЕЙ ПРИ ВВОДЕ ====================
-
-// 1. Телефон — только цифры, +, -, пробелы, скобки
-const phoneInput = document.getElementById("phone");
-if (phoneInput) {
-    phoneInput.addEventListener("input", (e) => {
-        let value = e.target.value;
-        value = value.replace(/[^0-9+\-()\s]/g, "");
-        e.target.value = value;
-    });
+function clearAllOrders() {
+    if (cloudMode) clearAllOrdersCloud();
+    else clearAllOrdersLocal();
 }
 
-// 2. ФИО — только буквы, пробелы, дефисы
-const nameInput = document.getElementById("fullName");
-if (nameInput) {
-    nameInput.addEventListener("input", (e) => {
-        let value = e.target.value;
-        value = value.replace(/[^a-zA-Zа-яА-ЯёЁ\s-]/g, "");
-        e.target.value = value;
-    });
-}
+// ==================== ИНИЦИАЛИЗАЦИЯ ====================
+document.addEventListener("DOMContentLoaded", async () => {
+    if (isCloudConfigured()) {
+        await initCloudAdmin();
+    } else {
+        setCloudUi({ showLogin: false, showOrders: true });
+        loadOrdersLocal();
+    }
 
-// 3. Email — без пробелов
-const emailInput = document.getElementById("email");
-if (emailInput) {
-    emailInput.addEventListener("input", (e) => {
-        let value = e.target.value;
-        value = value.replace(/\s/g, "");
-        e.target.value = value;
-    });
-}
+    const exportCSV = document.getElementById("exportCSVBtn");
+    const exportExcel = document.getElementById("exportExcelBtn");
+    const clearAll = document.getElementById("clearAllOrdersBtn");
 
-// 4. Telegram — обязательно начинается с @, затем буквы, цифры, подчёркивание
-const telegramInput = document.getElementById("telegram");
-if (telegramInput) {
-    telegramInput.addEventListener("input", (e) => {
-        let value = e.target.value;
-        
-        if (value.length > 0 && !value.startsWith("@")) {
-            value = "@" + value.replace(/^@+/, "");
-        }
-        
-        value = value.replace(/[^a-zA-Z0-9_@]/g, "");
-        
-        const parts = value.split("@");
-        if (parts.length > 1) {
-            value = "@" + parts.slice(1).join("").replace(/[^a-zA-Z0-9_]/g, "");
-        }
-        
-        value = value.replace(/\s/g, "");
-        
-        e.target.value = value;
-    });
-}
-
-// 5. Адрес — убираем лишние пробелы
-const addressInput = document.getElementById("address");
-if (addressInput) {
-    addressInput.addEventListener("input", (e) => {
-        let value = e.target.value;
-        value = value.replace(/\s+/g, " ").trim();
-        e.target.value = value;
-    });
-}
-
-// 6. Промокод — только буквы и цифры, без пробелов, в верхний регистр
-const promoInputField = document.getElementById("promocode");
-if (promoInputField) {
-    promoInputField.addEventListener("input", (e) => {
-        let value = e.target.value;
-        value = value.replace(/[^a-zA-Z0-9]/g, "");
-        value = value.toUpperCase();
-        e.target.value = value;
-    });
-}
-
-// ==================== ЗАПУСК ====================
-document.addEventListener("DOMContentLoaded", () => {
-    renderOrderSummary();
-    const submitBtn = document.getElementById("submitOrderBtn");
-    if (submitBtn) submitBtn.addEventListener("click", submitOrder);
+    if (exportCSV) exportCSV.addEventListener("click", exportToCSV);
+    if (exportExcel) exportExcel.addEventListener("click", exportToXLS);
+    if (clearAll) clearAll.addEventListener("click", clearAllOrders);
 });
