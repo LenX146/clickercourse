@@ -170,6 +170,67 @@
             color: #111;
         }
 
+        .admin-cloud-hint {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.45;
+        }
+
+        .admin-cloud-auth {
+            max-width: 360px;
+            padding: 20px;
+            border: 1px solid #eaeaea;
+            margin-bottom: 24px;
+        }
+
+        .admin-cloud-auth p {
+            font-size: 13px;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .admin-cloud-auth input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .admin-cloud-auth button {
+            margin-top: 8px;
+            padding: 10px 18px;
+            background: #111;
+            color: #fff;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .admin-login-err {
+            display: block;
+            color: #b00020;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .admin-logout-btn {
+            background: none;
+            border: 1px solid #ccc;
+            padding: 8px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .admin-logout-btn:hover {
+            border-color: #111;
+            color: #111;
+        }
+
         @media (max-width: 700px) {
             .admin-header {
                 flex-direction: column;
@@ -211,12 +272,24 @@
     </header>
 
     <div class="admin-container">
+        <p class="admin-cloud-hint" id="adminCloudHint"></p>
+
+        <div class="admin-cloud-auth" id="adminCloudAuth" hidden>
+            <p>Войдите учётной записью владельца (создайте пользователя в Supabase → Authentication → Users).</p>
+            <input type="email" id="adminEmail" placeholder="Email" autocomplete="username">
+            <input type="password" id="adminPassword" placeholder="Пароль" autocomplete="current-password">
+            <button type="button" id="adminLoginBtn">Войти</button>
+            <span class="admin-login-err" id="adminLoginErr"></span>
+        </div>
+
+        <div id="adminOrdersContent">
         <div class="admin-header">
             <h1>📋 Админ-панель — все заказы</h1>
             <div class="admin-stats">
                 Всего заказов: <span id="totalOrders">0</span>
             </div>
             <div class="export-buttons">
+                <button type="button" class="admin-logout-btn" id="adminLogoutBtn" hidden>Выйти</button>
                 <button class="export-btn" id="exportCSVBtn">📄 Экспорт CSV</button>
                 <button class="export-btn" id="exportExcelBtn">📊 Экспорт Excel</button>
                 <button class="clear-btn" id="clearAllOrdersBtn">🗑 Очистить все заказы</button>
@@ -226,6 +299,7 @@
         <div id="ordersList"></div>
 
         <a href="index.html" class="back-link">← Вернуться на главную</a>
+        </div>
     </div>
 
     <footer>
@@ -260,6 +334,9 @@
     </div>
 </aside>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="orders-db.js"></script>
 <script src="script.js"></script>
 <script src="admin.js"></script>
 </body>
