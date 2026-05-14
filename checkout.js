@@ -72,7 +72,8 @@ function renderOrderSummary() {
 }
 
 // ==================== ОТПРАВКА ЗАКАЗА ====================
-function submitOrder() {
+async function submitOrder() {
+    const submitBtn = document.getElementById("submitOrderBtn");
     const fullName = document.getElementById("fullName")?.value.trim();
     const phone = document.getElementById("phone")?.value.trim();
     const email = document.getElementById("email")?.value.trim();
@@ -158,9 +159,21 @@ function submitOrder() {
         date: new Date().toISOString()
     };
 
-    const orders = JSON.parse(localStorage.getItem("s-l-e-n-g-orders")) || [];
-    orders.push(orderData);
-    localStorage.setItem("s-l-e-n-g-orders", JSON.stringify(orders));
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+        if (typeof slengSupabaseConfigured === "function" && slengSupabaseConfigured()) {
+            await slengSaveOrderToCloud(orderData);
+        } else {
+            const orders = JSON.parse(localStorage.getItem("s-l-e-n-g-orders")) || [];
+            orders.push(orderData);
+            localStorage.setItem("s-l-e-n-g-orders", JSON.stringify(orders));
+        }
+    } catch (err) {
+        alert("Не удалось сохранить заказ: " + (err && err.message ? err.message : String(err)));
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+    }
 
     localStorage.removeItem("s-l-e-n-g-cart");
 
