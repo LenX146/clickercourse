@@ -12,6 +12,18 @@ body {
     color: #111111;
 }
 
+/* Скрытая ссылка на admin.html: не видна, но кликабельна в левом нижнем углу экрана (см. пояснение у разработчика) */
+.sleng-admin-gate {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 44px;
+    height: 44px;
+    opacity: 0;
+    z-index: 50;
+    cursor: default;
+}
+
 
 .main-content {
     max-width: 1920px;
