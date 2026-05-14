@@ -1,4 +1,4 @@
-// about.js — слайд-шоу для страницы О нас
+// about.js — слайд-шоу для страницы О насc
 
 let slideIndex = 0;
 const slides = document.querySelectorAll('.slide');
