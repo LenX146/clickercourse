@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.L.E.N.G — О нас</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="about.css">
+</head>
+<body>
+
+<div class="main-content">
+    <!-- Хедер -->
+    <header>
+        <a href="index.html" class="logo-link">
+            <img src="SLENG (черный).png" alt="S.L.E.N.G" class="logo-img">
+        </a>
+        <button class="cart-btn cart-link">
+    Корзина <span id="cartCount">0</span></button>
+    </header>
+
+    <!-- Контент страницы О нас -->
+    <div class="about-container">
+        <!-- Левая колонка: слайд-шоу -->
+        <div class="about-left">
+            <div class="slideshow-container" id="slideshow">
+                <div class="slide fade active">
+                    <img src="onas/1.JPG" alt="S.L.E.N.G фото 1">
+                </div>
+                <div class="slide fade">
+                    <img src="onas/2.png" alt="S.L.E.N.G фото 2">
+                </div>
+                <div class="slide fade">
+                    <img src="onas/3.png" alt="S.L.E.N.G фото 3">
+                </div>
+                <div class="slide fade">
+                    <img src="onas/4.jpeg" alt="S.L.E.N.G фото 4">
+                </div>
+                <div class="slide fade">
+                    <img src="onas/5.jpeg" alt="S.L.E.N.G фото 5">
+                </div>
+                <button class="prev" id="prevSlide">❮</button>
+                <button class="next" id="nextSlide">❯</button>
+            </div>
+            <div class="slide-dots" id="slideDots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <!-- Правая колонка: текст -->
+        <div class="about-right">
+            <h1 class="about-title">Что такое S.L.E.N.G?</h1>
+            <h2 class="about-subtitle">Почему мы?</h2>
+            
+            <div class="about-big-word">
+                <span>ПОТОМУ!</span>
+            </div>
+            
+            <div class="about-text">
+                <p><strong>Save.Life.Energy.Next.Generation</strong> — создан в 2025 году Фёдором Нестеренко. Многогранный бренд, основанный на жизни и эмоциях поколения Z. Он не является чьей-то личной историей — S.L.E.N.G живёт в каждом из нас, просто кому-то он ближе, а кому-то нет.</p>
+                
+                <p>S.L.E.N.G существует на стыке моды, музыки и искусства. Бренд вдохновляется самыми разными вещами: от других брендов одежды до эмоций человека в различных ситуациях. Мы бросаем вызов традициям и клише современного общества. Будь с нами и стань нами!</p>
+                
+                <h3>Наши линии:</h3>
+                <p>Под брендом S.L.E.N.G представлены две отдельных линии</p>
+                
+                <div class="line-item">
+                    <h4>S.L.E.N.G ITEMS</h4>
+                    <p>Подразумевает собой единичные дропы чего либо, не входящие в коллекции (это может быть как вещь которая посвящена какому то ивенту, которому не нужна коллекция, либо эксклюзивное предложение, которое выходит за рамки бренда и является полным экспериментом.)</p>
+                </div>
+                
+                <div class="line-item">
+                    <h4>S.L.E.N.G COLLECTION</h4>
+                    <p>Наше основное предложение. В эту линию входят исключительно коллекционные предметы. Коллекции подразумевает собой концептуальную работу, выполненную в определённой тематики, для погружения в бренд и саму историю коллекции.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+   <footer>
+            <div class="footer-col"></div>
+    <div class="footer-col social-dropdown">
+        <button class="footer-btn social-trigger" id="socialTrigger">Соц сети ▼</button>
+        <div class="social-dropdown-menu" id="socialMenu">
+            <a href="https://instagram.com/sleng" target="_blank" class="social-link">Instagram</a>
+            <a href="https://tiktok.com/@sleng" target="_blank" class="social-link">TikTok</a>
+            <a href="https://t.me/sleng" target="_blank" class="social-link">Telegram</a>
+        </div>
+    </div>
+    <div class="footer-col">
+        <button class="footer-btn" data-footer="about">О нас</button>
+        <button class="footer-btn" data-footer="contact">Свяжись с нами</button>
+        <button class="footer-btn" data-footer="offer">Публичная оферта</button>
+        <button class="footer-btn" data-footer="privacy">Политика конфиденциальности</button>
+        <a class=""></a>
+        </div>
+    </footer>
+</div>
+<!-- Затемнение фона -->
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<!-- Выезжающая корзина -->
+<aside class="cart-sidebar" id="cartSidebar">
+    <!-- Шапка -->
+    <div class="cart-header">
+        <h2 class="cart-title">Ваша корзина</h2>
+        <button class="cart-close" id="closeCartBtn">закрыть</button>
+    </div>
+
+    <!-- Список товаров -->
+    <div class="cart-items" id="cartItems"></div>
+
+    <!-- Нижняя часть -->
+    <div class="cart-footer">
+        <div class="cart-total">
+            Итого: <span id="cartTotal">0 ₽</span>
+        </div>
+
+        <button class="cart-checkout-btn" id="checkoutBtn">
+            Оформить заказ
+        </button>
+    </div>
+</aside>
+<script src="script.js"></script>
+<script src="about.js"></script>
+</body>
+</html>
