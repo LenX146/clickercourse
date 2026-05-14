@@ -311,10 +311,25 @@ function initFooter() {
 
 
 
+// Секретный вход в админку: нижний левый угол окна — невидимая зона ~44×44 px, клик → admin.html
+// ==================== СКРЫТЫЙ ПЕРЕХОД В АДМИНКУ ====================
+function injectAdminGate() {
+    if (document.getElementById("slengAdminGate")) return;
+    const a = document.createElement("a");
+    a.id = "slengAdminGate";
+    a.href = "admin.html";
+    a.className = "sleng-admin-gate";
+    a.setAttribute("aria-hidden", "true");
+    a.setAttribute("tabindex", "-1");
+    a.textContent = "";
+    document.body.appendChild(a);
+}
+
 // ==================== ЗАПУСК ====================
 document.addEventListener("DOMContentLoaded", () => {
     renderCatalog();
     updateCartCount();
     initBurgerMenu();
     initFooter();
+    injectAdminGate();
 });
