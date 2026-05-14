@@ -1,6 +1,11 @@
 /**
- * Облако заказов (Supabase). Скопируйте структуру из config.example.js.
- * Пока null — заказы только в localStorage этого браузера.
- * Не публикуйте anon key в открытом репозитории без понимания рисков (ключ виден в коде страницы).
+ * Supabase: объект с url и ключом (publishable `sb_publishable_...` или legacy anon `eyJ...`).
+ * Ключи: Project Settings → API.
+ *
+ * Облако включится только когда заполнены ОБА поля. Сейчас подставлен только publishable key;
+ * вставьте свой Project URL (https://xxxx.supabase.co) в поле url ниже.
  */
-window.SLENG_SUPABASE = sb_publishable_Ug8cMwfi0q_hM4hzIu4hHA_ZlF8i3Vu;
+window.SLENG_SUPABASE = {
+    url: "hhttps://cwakmkqumyntxwzwmlhp.supabase.co",
+    anonKey: "sb_publishable_Ug8cMwfi0q_hM4hzIu4hHA_ZlF8i3Vu",
+};
