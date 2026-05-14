@@ -5,6 +5,6 @@
  * Пока window.SLENG_SUPABASE = null — заказы снова только в localStorage этого браузера.
  */
 window.SLENG_SUPABASE = {
-    url: "https://ВАШ_ПРОЕКТ.supabase.co",
-    anonKey: "ВАШ_ANON_KEY",
+    url: "hhttps://cwakmkqumyntxwzwmlhp.supabase.co",
+    anonKey: "sb_publishable_Ug8cMwfi0q_hM4hzIu4hHA_ZlF8i3Vu",
 };
