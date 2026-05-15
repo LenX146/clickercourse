@@ -1,0 +1,194 @@
+/* about.css — стили для страницы О нас */
+
+.about-container {
+    display: flex;
+    gap: 60px;
+    padding: 40px 0;
+    flex: 1;
+}
+
+/* ===== ЛЕВАЯ КОЛОНКА (СЛАЙД-ШОУ) ===== */
+.about-left {
+    flex: 1;
+    position: relative;
+}
+
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #f5f5f5;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Кнопки слайд-шоу */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+    z-index: 10;
+}
+
+.prev:hover, .next:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/* Точки (индикаторы) */
+.slide-dots {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dot.active {
+    background: #111;
+}
+
+/* ===== ПРАВАЯ КОЛОНКА (ТЕКСТ) ===== */
+.about-right {
+    flex: 1;
+}
+
+.about-title {
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: -0.6px;
+    margin-bottom: 20px;
+}
+
+.about-big-word {
+    transform: rotate(388deg) skewX(-5deg);
+    margin: 10px 0 5px 0;
+    margin-left: 150px;
+}
+.about-subtitle {
+    font-size: 30px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.about-big-word span {
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: -6px;
+    background: linear-gradient(135deg, #111 0%, #000000 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.about-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.about-text h3 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 30px 0 10px 0;
+}
+
+.about-text h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 20px 0 8px 0;
+    letter-spacing: -0.3px;
+}
+
+.line-item {
+    margin: 25px 0;
+    padding-left: 15px;
+    border-left: 3px solid #111;
+}
+
+.line-item h4 {
+    margin: 0 0 8px 0;
+}
+
+.line-item p {
+    margin: 0;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 900px) {
+    .about-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .about-title {
+        font-size: 28px;
+    }
+    
+    .about-big-word span {
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 700px) {
+    .about-title {
+        font-size: 24px;
+    }
+    
+    .about-big-word span {
+        font-size: 45px;
+        letter-spacing: -2px;
+    }
+    
+    .about-text p {
+        font-size: 14px;
+    }
+    
+    .about-text h3 {
+        font-size: 18px;
+    }
+    
+    .about-text h4 {
+        font-size: 16px;
+    }
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.L.E.N.G — Оформление заказа</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="checkout.css">
+</head>
+<body>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="side-menu" id="sideMenu">
+    <div class="menu-header">
+        <h3>Каталог</h3>
+        <button class="close-menu" id="closeMenuBtn">Назад</button>
+    </div>
+    <ul class="menu-list">
+        <li><button data-category="upper">Верхняя одежда</button></li>
+        <li><button data-category="lower">Нижняя одежда</button></li>
+        <li><button data-category="accessories">Аксессуары</button></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <header>
+        <button class="burger-btn" id="burgerBtn">☰</button>
+        <a href="index.html" class="logo-link">
+            <img src="SLENG (черный).png" alt="S.L.E.N.G" class="logo-img">
+        </a>
+        <button class="cart-btn cart-link">Корзина <span id="cartCount">0</span></button>
+    </header>
+
+    <div class="checkout-container" id="checkoutContainer">
+        <div class="checkout-column">
+            <h2 class="checkout-section-title">Контактные данные</h2>
+            <div class="checkout-form-group">
+                <label>Ваше ФИО *</label>
+                <input type="text" id="fullName" placeholder="Иванов Иван Иванович">
+            </div>
+            <div class="checkout-form-group">
+                <label>Контактный телефон *</label>
+                <input type="tel" id="phone" placeholder="+7 999 123 45 67">
+            </div>
+            <div class="checkout-form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="chelkrutoi@mail.ru">
+            </div>
+
+            <h2 class="checkout-section-title" style="margin-top: 32px;">Доставка</h2>
+            <div class="checkout-form-group">
+                <label>Адрес пункта выдачи СДЭК</label>
+                <input type="text" id="address" placeholder="г. Москва, ул. Тверская, д. 1">
+            </div>
+            <div class="checkout-form-group">
+                <label>Ваш юзернейм в Telegram (для экстренной связи)</label>
+                <input type="text" id="telegram" placeholder="@slengsupport">
+            </div>
+            <div class="checkout-form-group promo-group">
+                <label>Промокод (если есть)</label>
+                <div class="promo-input-group">
+                    <input type="text" id="promocode" placeholder="SLENG10">
+                    <button id="applyPromoBtn">Применить</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-column">
+            <div class="order-summary">
+                <h2 class="checkout-section-title">Ваш заказ</h2>
+                <div class="order-items" id="orderItems"></div>
+                <div class="order-subtotal">
+                    <span>Сумма товара:</span>
+                    <span id="subtotal">0 ₽</span>
+                </div>
+                <div class="order-delivery">
+                    <span>Доставка:</span>
+                    <span id="deliveryCost">240 ₽</span>
+                </div>
+                <div class="order-total">
+                    <span>Итог:</span>
+                    <span id="totalPrice">0 ₽</span>
+                </div>
+                <button class="checkout-pay-btn" id="submitOrderBtn">Оплатить заказ</button>
+                <div class="checkout-agreement">
+                    <p>
+                        нажав кнопку "Оплатить заказ" я принимаю условия 
+                        <a href="offer.html" target="_blank">публичной оферты</a>, 
+                        <a href="privacy.html" target="_blank">политики конфиденциальности</a> и 
+                        <a href="privacy.html" target="_blank">обработки персональных данных</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-col"></div>
+        <div class="footer-col social-dropdown">
+            <button class="footer-btn social-trigger">Соц сети ▼</button>
+            <div class="social-dropdown-menu">
+                <a href="https://instagram.com/sleng" target="_blank" class="social-link">Instagram</a>
+                <a href="https://tiktok.com/@sleng" target="_blank" class="social-link">TikTok</a>
+                <a href="https://t.me/sleng" target="_blank" class="social-link">Telegram</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <button class="footer-btn" data-footer="about">О нас</button>
+            <button class="footer-btn" data-footer="contact">Свяжись с нами</button>
+            <button class="footer-btn" data-footer="offer">Публичная оферта</button>
+            <button class="footer-btn" data-footer="privacy">Политика конфиденциальности</button>
+        </div>
+    </footer>
+</div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h2 class="cart-title">Ваша корзина</h2>
+        <button class="cart-close" id="closeCartBtn">закрыть</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+        <div class="cart-total">Итого: <span id="cartTotal">0 ₽</span></div>
+        <button class="cart-checkout-btn" id="checkoutBtn">Оформить заказ</button>
+    </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="orders-db.js"></script>
+<script src="script.js"></script>
+<script src="checkout.js"></script>
+</body>
+</html>

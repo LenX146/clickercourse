@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.L.E.N.G — Админ-панель</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили только для админ-панели */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #111;
+        }
+
+        .admin-header h1 {
+            font-size: 28px;
+            font-weight: 500;
+            letter-spacing: -0.6px;
+        }
+
+        .admin-stats {
+            display: flex;
+            gap: 20px;
+            background: #f5f5f5;
+            padding: 15px 25px;
+            border-radius: 0;
+        }
+
+        .admin-stats span {
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .export-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .export-btn:hover {
+            border-color: #111;
+        }
+
+        .clear-btn {
+            background: none;
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .clear-btn:hover {
+            background: #ff0000;
+            color: white;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 60px;
+            color: #888;
+        }
+
+        .order-card {
+            border: 1px solid #eaeaea;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #111;
+        }
+
+        .order-date {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .order-total {
+            font-weight: 600;
+            font-size: 16px;
+            color: #111;
+        }
+
+        .order-customer {
+            background: #fafafa;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .order-customer p {
+            margin: 5px 0;
+        }
+
+        .order-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .order-items-table th,
+        .order-items-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-items-table th {
+            font-weight: 500;
+            background: #fafafa;
+        }
+
+        .delete-order-btn {
+            background: none;
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        .delete-order-btn:hover {
+            background: #ff0000;
+            color: white;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #888;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #111;
+        }
+
+        .admin-cloud-hint {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.45;
+        }
+
+        .admin-cloud-auth {
+            max-width: 360px;
+            padding: 20px;
+            border: 1px solid #eaeaea;
+            margin-bottom: 24px;
+        }
+
+        .admin-cloud-auth p {
+            font-size: 13px;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .admin-cloud-auth input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .admin-cloud-auth button {
+            margin-top: 8px;
+            padding: 10px 18px;
+            background: #111;
+            color: #fff;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .admin-login-err {
+            display: block;
+            color: #b00020;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .admin-logout-btn {
+            background: none;
+            border: 1px solid #ccc;
+            padding: 8px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .admin-logout-btn:hover {
+            border-color: #111;
+            color: #111;
+        }
+
+        @media (max-width: 700px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .order-items-table {
+                font-size: 12px;
+            }
+            .order-items-table th,
+            .order-items-table td {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="side-menu" id="sideMenu">
+    <div class="menu-header">
+        <h3>Каталог</h3>
+        <button class="close-menu" id="closeMenuBtn">Назад</button>
+    </div>
+    <ul class="menu-list">
+        <li><button data-category="upper">Верхняя одежда</button></li>
+        <li><button data-category="lower">Нижняя одежда</button></li>
+        <li><button data-category="accessories">Аксессуары</button></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <header>
+        <button class="burger-btn" id="burgerBtn">☰</button>
+        <a href="index.html" class="logo-link">
+            <img src="SLENG (черный).png" alt="S.L.E.N.G" class="logo-img">
+        </a>
+        <button class="cart-btn cart-link">Корзина <span id="cartCount">0</span></button>
+    </header>
+
+    <div class="admin-container">
+        <p class="admin-cloud-hint" id="adminCloudHint"></p>
+
+        <div class="admin-cloud-auth" id="adminCloudAuth" hidden>
+            <p>Войдите учётной записью владельца (создайте пользователя в Supabase → Authentication → Users).</p>
+            <input type="email" id="adminEmail" placeholder="Email" autocomplete="username">
+            <input type="password" id="adminPassword" placeholder="Пароль" autocomplete="current-password">
+            <button type="button" id="adminLoginBtn">Войти</button>
+            <span class="admin-login-err" id="adminLoginErr"></span>
+        </div>
+
+        <div id="adminOrdersContent">
+        <div class="admin-header">
+            <h1>📋 Админ-панель — все заказы</h1>
+            <div class="admin-stats">
+                Всего заказов: <span id="totalOrders">0</span>
+            </div>
+            <div class="export-buttons">
+                <button type="button" class="admin-logout-btn" id="adminLogoutBtn" hidden>Выйти</button>
+                <button class="export-btn" id="exportCSVBtn">📄 Экспорт CSV</button>
+                <button class="export-btn" id="exportExcelBtn">📊 Экспорт Excel</button>
+                <button class="clear-btn" id="clearAllOrdersBtn">🗑 Очистить все заказы</button>
+            </div>
+        </div>
+
+        <div id="ordersList"></div>
+
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-col"></div>
+        <div class="footer-col social-dropdown">
+            <button class="footer-btn social-trigger">Соц сети ▼</button>
+            <div class="social-dropdown-menu">
+                <a href="https://instagram.com/sleng" target="_blank" class="social-link">Instagram</a>
+                <a href="https://tiktok.com/@sleng" target="_blank" class="social-link">TikTok</a>
+                <a href="https://t.me/sleng" target="_blank" class="social-link">Telegram</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <button class="footer-btn" data-footer="about">О нас</button>
+            <button class="footer-btn" data-footer="contact">Свяжись с нами</button>
+            <button class="footer-btn" data-footer="offer">Публичная оферта</button>
+            <button class="footer-btn" data-footer="privacy">Политика конфиденциальности</button>
+        </div>
+    </footer>
+</div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h2 class="cart-title">Ваша корзина</h2>
+        <button class="cart-close" id="closeCartBtn">закрыть</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+        <div class="cart-total">Итого: <span id="cartTotal">0 ₽</span></div>
+        <button class="cart-checkout-btn" id="checkoutBtn">Оформить заказ</button>
+    </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="orders-db.js"></script>
+<script src="script.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
