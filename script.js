@@ -50,7 +50,7 @@ const products = [
         price: 555,
         category: "accessories",
         image: "legosergiii/1.png",
-        photos: ["legosergiii/1.png", "Legosergiii/6.png"],
+        photos: ["legosergiii/1.png", "legosergiii/6.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 0 }
