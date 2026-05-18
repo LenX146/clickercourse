@@ -28,7 +28,7 @@ const products = [
         price: 1555,
         category: "accessories",
         image: "Xbox360/xbox.png",
-        photos: ["Xbox360/xbox.png", "Xbox360/2 фото.png", "xbox360/3 фото.png"],
+        photos: ["Xbox360/xbox.png", "Xbox360/2 фото.png", "Xbox360/3 фото.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок геймпада xbox360. Гипераллергенный, бижутерный сплав. Отправка от 3-5 дней",
         stock: { OS: 4 }
