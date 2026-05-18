@@ -50,7 +50,7 @@ const products = [
         price: 555,
         category: "accessories",
         image: "legosergiii/1.png",
-        photos: ["legosergiii/1.png", "legosergiii/6.png"],
+        photos: ["legosergiii/1.png", "Legosergiii/6.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 0 }
@@ -191,8 +191,14 @@ function initBurgerMenu() {
     const closeBtn = document.getElementById("closeMenuBtn");
     if (!burgerBtn || !sideMenu) return;
     
-    function openMenu() { sideMenu.classList.add("open"); if (overlay) overlay.classList.add("open"); }
-    function closeMenu() { sideMenu.classList.remove("open"); if (overlay) overlay.classList.remove("open"); }
+    function openMenu() { 
+        sideMenu.classList.add("open"); 
+        if (overlay) overlay.classList.add("open"); 
+    }
+    function closeMenu() { 
+        sideMenu.classList.remove("open"); 
+        if (overlay) overlay.classList.remove("open"); 
+    }
     
     burgerBtn.addEventListener("click", openMenu);
     if (closeBtn) closeBtn.addEventListener("click", closeMenu);
@@ -235,7 +241,7 @@ function renderCartSidebar() {
                     <button onclick="changeQuantity(${item.id}, '${item.selectedSize}', 1)">+</button>
                 </div>
             </div>
-            <button class="cart-remove" onclick="removeItem(${item.id}, '${item.selectedSize}')">Удалит</button>
+            <button class="cart-remove" onclick="removeItem(${item.id}, '${item.selectedSize}')">Удалить</button>
         </div>
     `).join("");
     
@@ -257,6 +263,7 @@ function closeCart() {
     cartOverlay.classList.remove("active");
     document.body.style.overflow = "";
 }
+
 // ==================== КНОПКА ОФОРМИТЬ ЗАКАЗ ====================
 const checkoutBtn = document.getElementById("checkoutBtn");
 if (checkoutBtn) {
@@ -289,11 +296,16 @@ window.removeItem = function(id, size) {
 
 // Инициализация кнопок корзины
 document.querySelectorAll(".cart-link").forEach(btn => {
-    btn.addEventListener("click", (e) => { e.preventDefault(); openCart(); });
+    btn.addEventListener("click", (e) => { 
+        e.preventDefault(); 
+        openCart(); 
+    });
 });
 document.getElementById("closeCartBtn")?.addEventListener("click", closeCart);
 document.getElementById("cartOverlay")?.addEventListener("click", closeCart);
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
+document.addEventListener("keydown", (e) => { 
+    if (e.key === "Escape") closeCart(); 
+});
 
 // ==================== ФУТЕР ====================
 function initFooter() {
@@ -309,9 +321,18 @@ function initFooter() {
     });
 }
 
+// ==================== СОЦСЕТИ ДЛЯ МОБИЛЬНЫХ ====================
+function initMobileSocial() {
+    const socialTrigger = document.getElementById("socialTrigger");
+    const socialMenu = document.getElementById("socialMenu");
+    if (socialTrigger && socialMenu) {
+        socialTrigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            socialMenu.classList.toggle("open");
+        });
+    }
+}
 
-
-// Секретный вход в админку: нижний левый угол окна — невидимая зона ~44×44 px, клик → admin.html
 // ==================== СКРЫТЫЙ ПЕРЕХОД В АДМИНКУ ====================
 function injectAdminGate() {
     if (document.getElementById("slengAdminGate")) return;
@@ -331,5 +352,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCount();
     initBurgerMenu();
     initFooter();
+    initMobileSocial();
     injectAdminGate();
 });
