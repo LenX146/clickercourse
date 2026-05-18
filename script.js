@@ -323,12 +323,25 @@ function initFooter() {
 
 // ==================== СОЦСЕТИ ДЛЯ МОБИЛЬНЫХ ====================
 function initMobileSocial() {
-    const socialTrigger = document.getElementById("socialTrigger");
-    const socialMenu = document.getElementById("socialMenu");
+    const socialTrigger = document.getElementById('socialTrigger');
+    const socialMenu = document.getElementById('socialMenu');
+    
     if (socialTrigger && socialMenu) {
-        socialTrigger.addEventListener("click", (e) => {
+        // Убираем старые обработчики, чтобы не дублировать
+        const newTrigger = socialTrigger.cloneNode(true);
+        socialTrigger.parentNode.replaceChild(newTrigger, socialTrigger);
+        
+        newTrigger.addEventListener('click', (e) => {
             e.preventDefault();
-            socialMenu.classList.toggle("open");
+            e.stopPropagation();
+            socialMenu.classList.toggle('open');
+        });
+        
+        // Закрываем при клике вне
+        document.addEventListener('click', (e) => {
+            if (!newTrigger.contains(e.target) && !socialMenu.contains(e.target)) {
+                socialMenu.classList.remove('open');
+            }
         });
     }
 }
@@ -346,12 +359,26 @@ function injectAdminGate() {
     document.body.appendChild(a);
 }
 
-// ==================== ЗАПУСК ====================
+// Простой обработчик для соцсетей (без ошибок)
+const socialTrigger = document.getElementById('socialTrigger');
+const socialMenu = document.getElementById('socialMenu');
+
+if (socialTrigger && socialMenu) {
+    socialTrigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        socialMenu.classList.toggle('open');
+    });
+}
+
+// ==================== ЗАПУСК (ТОЛЬКО ОДИН РАЗ!) ====================
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM загружен");
     renderCatalog();
     updateCartCount();
     initBurgerMenu();
     initFooter();
     initMobileSocial();
     injectAdminGate();
+
 });
