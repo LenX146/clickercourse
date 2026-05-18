@@ -49,8 +49,8 @@ const products = [
         name: "Серьги Lego (Белый)",
         price: 555,
         category: "accessories",
-        image: "legosergi/1 белые серьги.png",
-        photos: ["legosergi/1 белые серьги.png", "Legosergi/2 белые серьги.png"],
+        image: "legosergiii/1.png",
+        photos: ["legosergiii/1.png", "Legosergiii/6.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 0 }
