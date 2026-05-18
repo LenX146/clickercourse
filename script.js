@@ -39,7 +39,7 @@ const products = [
         price: 1333,
         category: "accessories",
         image: "BIGBASS/1.png",
-        photos: ["BIGBASS/1.png", "bIGBASS/2.png", "BIGBASS/3.JPG"],
+        photos: ["BIGBASS/1.png", "BIGBASS/2.png", "BIGBASS/3.JPG"],
         size: "OS",
         desc: "Выполнено из нержавеющей стали. Двухсторонний. Лазерная граверовка. Отправка от 1-2 дня",
         stock: { OS: 4 }
