@@ -538,3 +538,48 @@ footer {
         font-size: 16px;
     }
 }
+
+/* ===== ФИКС ЦВЕТА КНОПОК НА МОБИЛЬНЫХ ===== */
+button,
+.burger-btn,
+.cart-btn,
+.cart-btn span,
+.cart-close,
+.close-menu,
+.social-trigger,
+#applyPromoBtn,
+.cart-qty button,
+.cart-remove {
+    color: #111111 !important;
+}
+
+button:active,
+button:focus,
+a:active,
+a:focus {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+}
+
+.cart-checkout-btn,
+.add-to-cart-btn,
+.checkout-pay-btn {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+}
+
+.add-to-cart-btn.sold-out-btn {
+    background-color: #b3b3b3 !important;
+    color: #ffffff !important;
+}
+
+.cart-btn span {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+}
+
+.cart-qty button {
+    border: none;
+    background: none;
+}
