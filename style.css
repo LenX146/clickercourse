@@ -12,7 +12,7 @@ body {
     color: #111111;
 }
 
-/* Скрытая ссылка на admin.html: не видна, но кликабельна в левом нижнем углу экрана (см. пояснение у разработчика) */
+/* Скрытая ссылка на admin.html: не видна, но кликабельна в левом нижнем углу экрана */
 .sleng-admin-gate {
     position: fixed;
     left: 0;
@@ -23,7 +23,6 @@ body {
     z-index: 50;
     cursor: default;
 }
-
 
 .main-content {
     max-width: 1920px;
@@ -80,6 +79,7 @@ header {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #111;
 }
 
 .cart-btn span {
@@ -514,28 +514,149 @@ footer {
     line-height: 1;
 }
 
-/* Адаптив */
-@media (max-width: 768px) {
-    .cart-sidebar {
+/* ===== АДАПТИВ (МОБИЛЬНАЯ ВЕРСИЯ) ===== */
+@media (max-width: 700px) {
+    .main-content {
+        padding: 0 16px;
+    }
+    
+    /* Хедер */
+    header {
+        height: auto;
+        padding: 12px 0;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        position: relative;
+    }
+    
+    .burger-btn {
+        font-size: 24px;
+        padding: 8px;
+        order: 1;
+    }
+    
+    .logo-link {
+        position: static;
+        transform: none;
+        margin: 0;
+        order: 2;
+    }
+    
+    .logo-img {
+        height: 28px;
+    }
+    
+    .cart-btn {
+        margin-left: 0;
+        font-size: 13px;
+        order: 3;
+    }
+    
+    .cart-btn span {
+        font-size: 11px;
+        padding: 2px 6px;
+    }
+    
+    /* Каталог */
+    .catalog {
+        gap: 24px;
+        margin: 20px 0 40px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Футер */
+    footer {
+        gap: 8px;
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+        padding: 24px 0 32px;
+        margin-top: 20px;
+    }
+    
+    .footer-col {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .footer-btn {
+        margin: 0;
+        padding: 10px 0;
+        display: block;
+        width: 100%;
+        text-align: left;
+        font-size: 14px;
+    }
+    
+    /* Соц сети на мобильных */
+    .social-dropdown {
         width: 100%;
     }
-
-    .cart-title {
-        font-size: 24px;
+    
+    .social-trigger {
+        margin: 0;
+        padding: 10px 0;
+        text-align: left;
+        width: 100%;
     }
-
-    .cart-item {
-        grid-template-columns: 60px 1fr;
-        gap: 12px;
+    
+    .social-dropdown-menu {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin-left: 15px;
+        display: none;
     }
-
-    .cart-remove {
-        grid-column: 2;
-        margin-top: 6px;
+    
+    .social-dropdown-menu.open {
+        display: block;
     }
+    
+    .social-link {
+        padding: 8px 0;
+        text-align: left;
+        font-size: 13px;
+    }
+    
+    .social-dropdown:hover .social-dropdown-menu {
+        transform: none;
+    }
+}
 
-    .cart-empty {
-        font-size: 16px;
+/* Очень узкие экраны (320-480px) */
+@media (max-width: 480px) {
+    .catalog {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .product-title {
+        font-size: 14px;
+    }
+    
+    .product-price {
+        font-size: 14px;
+    }
+    
+    .burger-btn {
+        font-size: 22px;
+    }
+    
+    .cart-btn {
+        font-size: 12px;
+    }
+    
+    .logo-img {
+        height: 24px;
+    }
+    
+    .footer-btn {
+        font-size: 13px;
     }
 }
 
@@ -582,4 +703,19 @@ a:focus {
 .cart-qty button {
     border: none;
     background: none;
+}
+
+/* Адаптив для корзины */
+@media (max-width: 768px) {
+    .cart-sidebar {
+        width: 100%;
+    }
+
+    .cart-title {
+        font-size: 24px;
+    }
+
+    .cart-empty {
+        font-size: 16px;
+    }
 }
