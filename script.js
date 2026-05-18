@@ -71,8 +71,8 @@ const products = [
         name: "Серьги Lego (Красный)",
         price: 555,
         category: "accessories",
-        image: "legosergi/1 красные серьги.png",
-        photos: ["legosergi/1 красные серьги.png", "legosergi/2 красные серьги .png"],
+        image: "legosergiii/3.png",
+        photos: ["legosergiii/3.png", "legosergiii/8.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 2 }
@@ -82,8 +82,8 @@ const products = [
         name: "Серьги Lego (Черный)",
         price: 555,
         category: "accessories",
-        image: "legosergi/Копия 1 черные серьги.png",
-        photos: ["legosergi/Копия 1 черные серьги.png", "legosergi/2 черные серьги.png"],
+        image: "legosergiii/4.png",
+        photos: ["legosergiii/4.png", "legosergiii/9.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 2 }
@@ -93,8 +93,8 @@ const products = [
         name: "Серьги Lego (Зеленый)",
         price: 555,
         category: "accessories",
-        image: "legosergi/1 зеленые серьги.png",
-        photos: ["legosergi/1 зеленые серьги.png", "legosergi/2 зеленые серьги .png"],
+        image: "legosergiii/5.png",
+        photos: ["legosergiii/5.png", "legosergiii/10.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 2 }
@@ -104,8 +104,8 @@ const products = [
         name: "Серьги Lego (Розовые)",
         price: 555,
         category: "accessories",
-        image: "legosergi/Копия 1 розовые серьги.png",
-        photos: ["legosergi/Копия 1 розовые серьги.png", "legosergi/2 розовые серьги.png"],
+        image: "legosergiii/2.png",
+        photos: ["legosergiii/2.png", "legosergiii/7.png"],
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
         stock: { OS: 2 }
