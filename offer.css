@@ -1,0 +1,74 @@
+/* offer.css — стили страницы публичной оферты, минималистичные, как на референсе */
+
+.offer-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: inherit;
+    color: #111;
+    line-height: 1.5;
+}
+
+.offer-header {
+    text-align: center;
+    margin-bottom: 50px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 30px;
+}
+
+.offer-header h1 {
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.6px;
+    margin-bottom: 15px;
+}
+
+.offer-header p {
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+.offer-date,
+.offer-city {
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+}
+
+.offer-content h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 30px 0 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.offer-content p {
+    font-size: 15px;
+    margin-bottom: 12px;
+    text-align: justify;
+}
+
+/* Адаптив */
+@media (max-width: 700px) {
+    .offer-container {
+        padding: 20px 16px;
+    }
+    
+    .offer-header h1 {
+        font-size: 26px;
+    }
+    
+    .offer-header p {
+        font-size: 16px;
+    }
+    
+    .offer-content h2 {
+        font-size: 18px;
+    }
+    
+    .offer-content p {
+        font-size: 14px;
+    }
+}
