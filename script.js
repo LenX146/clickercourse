@@ -279,7 +279,7 @@ const products = [
         price: 555,
         category: ["accessories"],
         image: "2010/legosergiii/1.png",
-        photos: ["2010/legosergiii/1.png", "2010/Legosergiii/6.png"],
+        photos: ["2010/legosergiii/1.png", "2010/Legosergiii/66.png"],
         modelImage: "2010/Legosergiii/6.png",
         size: "OS",
         desc: "Выполнено из оригинальных кнопок Лего. Гипераллергенный, бижутерный сплав.",
