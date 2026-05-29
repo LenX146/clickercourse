@@ -163,7 +163,7 @@ const products = [
         category: ["accessories"],
         image: "NEWEMO/ZUBI/1 фото.png",
         photos: [],
-        modelImage: "NEWEMO/emogreatagain/DSC_8189.JPG",
+        modelImage: "",
         size: "OS",
         desc: "Серьги в стиле emo",
         stock: { OS: 2 },
