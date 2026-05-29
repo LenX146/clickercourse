@@ -872,53 +872,58 @@ body.ugly-emo-mode .logo-emo {
     display: block;
 }
 
-/* Каталог */
+/* ===== ЭКСТРЕННОЕ УМЕНЬШЕНИЕ РАССТОЯНИЯ В EMO-РЕЖИМЕ ===== */
 body.ugly-emo-mode .catalog {
-    gap: 10px;
-    background: transparent;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 4px !important;
+    row-gap: 4px !important;
+    column-gap: 4px !important;
+    margin: 10px 0 !important;
 }
 
 body.ugly-emo-mode .product-card {
-    background: #ffff00 !important;
-    border: 3px dotted #ff0000 !important;
-    padding: 8px !important;
-    text-align: center;
-    transform: rotate(-1deg);
-}
-
-body.ugly-emo-mode .product-card:nth-child(even) {
-    transform: rotate(2deg);
-    background: #00ff00 !important;
-}
-
-body.ugly-emo-mode .product-card:hover {
-    transform: rotate(0deg) scale(1.02);
-    background: #ff00ff !important;
-    border: 3px dashed #00ffff !important;
+    padding: 2px !important;
+    margin: 0 !important;
+    border: 2px dotted #ff0000 !important;
 }
 
 body.ugly-emo-mode .product-img {
-    border: 2px solid #ff0000;
-    filter: contrast(150%) saturate(200%);
+    margin-bottom: 2px !important;
 }
 
 body.ugly-emo-mode .product-title {
-    color: #0000ff !important;
-    font-family: 'Courier New', monospace !important;
-    font-size: 12px !important;
-    text-transform: uppercase;
-    text-decoration: underline overline;
-    letter-spacing: -1px;
+    font-size: 8px !important;
+    margin: 2px 0 !important;
+    line-height: 1.2 !important;
 }
 
 body.ugly-emo-mode .product-price {
-    color: #ff0000 !important;
-    font-family: 'Courier New', monospace !important;
-    font-size: 18px !important;
-    font-weight: bold;
-    background: #ffffff;
-    display: inline-block;
-    padding: 2px 8px;
+    font-size: 10px !important;
+    padding: 0px 2px !important;
+    margin: 0 !important;
+}
+
+/* На мобильных телефонах - 1 колонка */
+@media (max-width: 600px) {
+    body.ugly-emo-mode .catalog {
+        grid-template-columns: 1fr !important;
+        gap: 6px !important;
+    }
+    
+    body.ugly-emo-mode .product-card {
+        padding: 4px !important;
+    }
+}
+
+/* В EMO-режиме тоже уменьшаем расстояние */
+body.ugly-emo-mode .menu-list li {
+    margin-bottom: 6px !important;
+}
+
+body.ugly-emo-mode .menu-list button {
+    padding: 0px 0 !important;
+    font-size: 14px !important;
 }
 
 /* Бургер меню */
