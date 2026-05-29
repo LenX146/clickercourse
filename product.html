@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>что то</title>
+
+    <meta name="description" content="Товар">
+    <link rel="icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="product.css">
+</head>
+<body>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="side-menu" id="sideMenu">
+    <div class="menu-header">
+        <h3>Каталог</h3>
+        <button class="close-menu" id="closeMenuBtn">Назад</button>
+    </div>
+    <ul class="menu-list">
+        <li><button data-category="upper">Верхняя одежда</button></li>
+        <li><button data-category="lower">Нижняя одежда</button></li>
+        <li><button data-category="accessories">Аксессуары</button></li>
+        <li><button data-category="sets">Комплекты</button></li>
+        <li><button data-category="slengitems">S.L.E.N.G ITEMS</button></li>
+    <li><button data-category="collection">S.L.E.N.G COLLECTION</button></li>
+    <li><button class="crooked-menu-btn" id="aboutMenuBtn">О нас</button></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <!-- Хедер с адаптивной корзиной (текст → иконка при ≤400px) -->
+    <header>
+        <button class="burger-btn" id="burgerBtn">☰</button>
+        <a href="index.html" class="logo-link">
+    <img src="SLENG (черный).png" alt="S.L.E.N.G" class="logo-img logo-normal">
+    <img src="SLENGEMO.png" alt="S.L.E.N.G EMO" class="logo-img logo-emo" style="display: none;">
+</a>
+        <button class="cart-btn cart-link">
+            <span class="cart-text">Корзина</span>
+            <span id="cartCount">0</span>
+        </button>
+    </header>
+
+    <!-- Кнопка "Назад" (ВНЕ product-container) -->
+    <div class="back-button-container">
+        <button class="back-to-catalog" id="backToCatalogBtn">
+            ← Назад
+        </button>
+    </div>
+
+    <!-- Карточка товара -->
+    <div class="product-container" id="productContainer">
+
+        <!-- Фото -->
+        <div class="product-image">
+            <!-- Вертикальные миниатюры (только на компьютере) -->
+            <div class="product-thumbnails" id="productThumbnails"></div>
+
+            <!-- Основное изображение -->
+            <div class="product-main-image" id="productMainImage">
+                <img id="productImg" src="бич.png" alt="Товар">
+            </div>
+        </div>
+
+        <!-- Навигация под фото (стрелки + точки) — как на странице "О нас" -->
+        <div class="mobile-gallery-controls" id="mobileGalleryControls">
+            <button class="mobile-gallery-prev" id="mobilePrevBtn">❮</button>
+            <div class="mobile-gallery-dots" id="mobileGalleryDots"></div>
+            <button class="mobile-gallery-next" id="mobileNextBtn">❯</button>
+        </div>
+
+        <!-- Информация о товаре -->
+        <div class="product-info">
+            <h1 class="product-title" id="productTitle">Название товара</h1>
+
+            <!-- Описание -->
+            <ul class="product-features" id="productFeatures"></ul>
+
+            <!-- Цена -->
+            <div class="product-price" id="productPrice">0 ₽</div>
+
+            <!-- Для товаров с одним размером -->
+            <div
+                class="product-size-info"
+                id="productSizeInfo"
+                style="display: none; margin-bottom: 20px; font-size: 14px; color: #3a3a3a;"
+            ></div>
+
+            <!-- Выбор размеров -->
+            <div class="size-selector">
+                <button class="size-btn" data-size="S">S</button>
+                <button class="size-btn" data-size="M">M</button>
+                <button class="size-btn" data-size="L">L</button>
+                <button class="size-btn" data-size="XL">XL</button>
+                <button class="size-btn" data-size="2XL">2XL</button>
+            </div>
+
+            <!-- Кнопка покупки -->
+            <button class="add-to-cart-btn" id="addToCartBtn">
+                добавить в корзину
+            </button>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-col">
+            <button class="footer-btn" id="socialTrigger">Соц сети ▼</button>
+            <div class="social-dropdown-menu" id="socialMenu">
+                <a href="https://www.tiktok.com/@sleng444?_r=1&_t=ZN-96V1DmarOHi" target="_blank" class="social-link">Inst*</a>
+                <a href="https://www.instagram.com/savelifeenergynewgeneration?igsh=MTZweHlod3pjZm05eA%3D%3D&utm_source=qr" target="_blank" class="social-link">TikTok</a>
+                <a href="https://t.me/SLENG4" target="_blank" class="social-link">(→_→) Telegram</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <button class="footer-btn" data-footer="about">О нас</button>
+        </div>
+        <div class="footer-col">
+            <button class="footer-btn" data-footer="contact">Свяжись с нами</button>
+        </div>
+        <div class="footer-col">
+            <button class="footer-btn" data-footer="offer">Публичная оферта</button>
+        </div>
+        <div class="footer-col">
+            <button class="footer-btn" data-footer="privacy">Политика конфиденциальности</button>
+        </div>
+    </footer>
+</div>
+
+<!-- Затемнение фона -->
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<!-- Выезжающая корзина -->
+<aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h2 class="cart-title">Ваша корзина</h2>
+        <button class="cart-close" id="closeCartBtn">закрыть</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+        <div class="cart-total">Итого: <span id="cartTotal">0 ₽</span></div>
+        <button class="cart-checkout-btn" id="checkoutBtn">Оформить заказ</button>
+    </div>
+</aside>
+
+<!-- Скрипты -->
+<script src="script.js"></script>
+<script src="product.js"></script>
+
+</body>
+</html>
