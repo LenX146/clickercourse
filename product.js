@@ -7,6 +7,13 @@ const product = products.find(p => p.id === productId);
 
 let selectedSize = "M";
 
+// ==================== УСТАНАВЛИВАЕМ УНИКАЛЬНЫЙ TITLE ====================
+if (product) {
+    document.title = product.name + " — S.L.E.N.G";
+} else {
+    document.title = "Товар не найден | S.L.E.N.G";
+}
+
 // ==================== ЗАПОЛНЯЕМ КАРТОЧКУ ====================
 if (product) {
     document.getElementById("productTitle").innerText = product.name;
