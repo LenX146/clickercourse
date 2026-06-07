@@ -1,0 +1,217 @@
+/* privacy.css — стили для страницы политики конфиденциальности
+   Оформление в едином стиле с остальным сайтом S.L.E.N.G
+   Соответствует минималистичному дизайну и общей стилистике */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    color: #111111;
+    line-height: 1.5;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* основной контейнер — узкая колонка, как на референсе */
+.privacy-document {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 24px 60px 24px;
+    flex: 1;
+}
+
+/* шапка с заголовком и датой */
+.privacy-header {
+    text-align: left;
+    margin-bottom: 48px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 32px;
+}
+
+.privacy-header h1 {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.6px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: #000;
+}
+
+.privacy-header .lead {
+    font-size: 18px;
+    font-weight: 350;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.privacy-date {
+    font-size: 13px;
+    color: #6c6c6c;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 10px;
+}
+
+/* основной текст — чёткая иерархия */
+.privacy-content {
+    font-size: 15px;
+    color: #1a1a1a;
+}
+
+.privacy-content h2 {
+    font-size: 20px;
+    font-weight: 540;
+    margin: 36px 0 16px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #efefef;
+    letter-spacing: -0.2px;
+}
+
+.privacy-content h3 {
+    font-size: 17px;
+    font-weight: 500;
+    margin: 28px 0 12px 0;
+}
+
+.privacy-content p {
+    margin-bottom: 1.1em;
+    text-align: left;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.privacy-content ul, 
+.privacy-content ol {
+    margin: 1em 0 1.2em 1.8em;
+}
+
+.privacy-content li {
+    margin-bottom: 0.4em;
+}
+
+/* таблицы — адаптив, скролл на мобильных, тонкие границы */
+.table-wrapper {
+    overflow-x: auto;
+    margin: 24px 0 28px 0;
+    border: 1px solid #e9e9e9;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: #fff;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid #ddd;
+    padding: 12px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.data-table th {
+    background-color: #f8f8f8;
+    font-weight: 550;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+}
+
+hr {
+    margin: 32px 0;
+    border: 0;
+    border-top: 1px solid #ececec;
+}
+
+/* ссылки */
+a {
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #555;
+}
+
+/* футер внутри privacy-document */
+.privacy-document footer {
+    margin-top: 60px;
+    border-top: 1px solid #eaeaea;
+    padding-top: 32px;
+    font-size: 13px;
+    color: #5a5a5a;
+}
+
+.privacy-document footer p:last-child {
+    margin-bottom: 0;
+}
+
+/* адаптивность под мобильные устройства */
+@media (max-width: 700px) {
+    .privacy-document {
+        padding: 32px 20px 50px 20px;
+    }
+    
+    .privacy-header h1 {
+        font-size: 26px;
+    }
+    
+    .privacy-header .lead {
+        font-size: 16px;
+    }
+    
+    .privacy-content {
+        font-size: 14px;
+    }
+    
+    .privacy-content h2 {
+        font-size: 19px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 8px 8px;
+        font-size: 12px;
+    }
+}
+
+/* убираем лишние отступы для контента внутри main-content */
+.main-content .privacy-document {
+    margin: 0 auto;
+}
+
+/* стили для списков с крестиками/дефисами (как в основном сайте) */
+.privacy-content ul li::marker,
+.privacy-content ol li::marker {
+    color: #888;
+}
+
+/* выделение важных терминов */
+.privacy-content strong {
+    font-weight: 550;
+    color: #000;
+}
+
+/* контактные данные в конце документа */
+.privacy-content .contact-info {
+    background: #fafafa;
+    padding: 20px;
+    margin: 30px 0 20px;
+    border-left: 3px solid #111;
+}
+
+.privacy-content .contact-info p {
+    margin-bottom: 8px;
+}
+
+.privacy-content .contact-info p:last-child {
+    margin-bottom: 0;
+}
